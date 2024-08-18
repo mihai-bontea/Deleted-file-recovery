@@ -12,9 +12,12 @@
 
 - partition needs to be taken offline first so that it's not modified while the program runs(doable through command prompt)
 
+- Windows 10 often uses non-contiguous memory allocation(separate blocks scattered throughout the memory, this increases the complexity of finding the free memory
+blocks and also of analyzing for deleted files)
+
 how to parallelize it?
 ======================
-1) get all file HANDLEs (cannot be parallelized afaik)
+1) get all file HANDLEs
 2) for each file, 'map' it to the nr of free bytes since the previous file(can be parallelized): free_bytes_since_last[i]
 3) based on above step, create a struct FreeMemoryBlock for each block between two consecutive files
    * the struct will contain beginning and ending memory offset, and the size of the block

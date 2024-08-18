@@ -55,7 +55,7 @@ int main() {
 
     std::cout << "We have " << nr_invalid_handles << " invalid filenames out of " <<  all_file_handles.size() << " files!\n";
 
-    auto hFile = all_file_handles[99];
+    auto hFile = all_file_handles[990];
 
     // Get the volume handle
 //    HANDLE hVolume = CreateFile(_T("\\\\.\\C:"), 0, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
@@ -108,9 +108,21 @@ int main() {
     }
 
     // Process the retrieval pointers information in the buffer
-    RETRIEVAL_POINTERS_BUFFER* retrievalBuffer = (RETRIEVAL_POINTERS_BUFFER*)buffer;
 
     // TODO: Process the retrieval pointers information as needed
+    RETRIEVAL_POINTERS_BUFFER* retrieval_pointers = (RETRIEVAL_POINTERS_BUFFER*)buffer;
+
+    std::cout << "VCN to LCN mapping:" << std::endl;
+    for (DWORD i = 0; i < retrieval_pointers->ExtentCount; ++i) {
+        std::cout << "VCN: " << retrieval_pointers->StartingVcn.QuadPart + i
+                  << ", LCN: " << retrieval_pointers->Extents[i].Lcn.QuadPart
+                  << ", Length: " << retrieval_pointers->Extents[i].NextVcn.QuadPart - retrieval_pointers->StartingVcn.QuadPart
+                  << std::endl;
+    }
+
+//    free(extents);
+
+
 
     return 0;
 }
